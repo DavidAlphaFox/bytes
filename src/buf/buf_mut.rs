@@ -1491,7 +1491,7 @@ unsafe impl BufMut for &mut [u8] {
         }
 
         // Lifetime dance taken from `impl Write for &mut [u8]`.
-        let (_, b) = core::mem::replace(self, &mut []).split_at_mut(cnt);
+        let (_, b) = core::mem::replace(self, &mut []).split_at_mut(cnt); //用一个空数组替换原有的数组，并进行拆分
         *self = b;
     }
 
@@ -1543,7 +1543,7 @@ unsafe impl BufMut for &mut [core::mem::MaybeUninit<u8>] {
     }
 
     #[inline]
-    fn put_slice(&mut self, src: &[u8]) {
+    fn put_slice(&mut self, src: &[u8]) { //此处self类型为 &mut &mut [u8]
         if self.len() < src.len() {
             panic_advance(src.len(), self.len());
         }
