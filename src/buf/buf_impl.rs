@@ -12,11 +12,11 @@ use alloc::boxed::Box;
 
 macro_rules! buf_get_impl {
     ($this:ident, $typ:tt::$conv:tt) => {{
-        const SIZE: usize = core::mem::size_of::<$typ>();
+        const SIZE: usize = core::mem::size_of::<$typ>(); //得到类型的大小
 
         if $this.remaining() < SIZE {
             panic_advance(SIZE, $this.remaining());
-        }
+        } //自己剩余内容小于SIZE，直接报错
 
         // try to convert directly from the bytes
         // this Option<ret> trick is to avoid keeping a borrow on self
@@ -272,9 +272,9 @@ pub trait Buf {
 
         while !dst.is_empty() {
             let src = self.chunk();
-            let cnt = usize::min(src.len(), dst.len());
+            let cnt = usize::min(src.len(), dst.len()); //取两者最小的
 
-            dst[..cnt].copy_from_slice(&src[..cnt]);
+            dst[..cnt].copy_from_slice(&src[..cnt]); //用自己的0..cnt替代目标的0..cnt
             dst = &mut dst[cnt..];
 
             self.advance(cnt);
@@ -297,9 +297,9 @@ pub trait Buf {
     /// # Panics
     ///
     /// This function panics if there is no more remaining data in `self`.
-    fn get_u8(&mut self) -> u8 {
+    fn get_u8(&mut self) -> u8 { //读取一个8bit的integer
         if self.remaining() < 1 {
-            panic_advance(1, 0);
+            panic_advance(1, 0); 
         }
         let ret = self.chunk()[0];
         self.advance(1);
