@@ -917,7 +917,7 @@ impl fmt::Debug for Vtable {
 }
 
 // ===== impl StaticVtable =====
-
+//默认的VTable实现
 const STATIC_VTABLE: Vtable = Vtable {
     clone: static_clone,
     to_vec: static_to_vec,
